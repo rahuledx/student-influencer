@@ -27,15 +27,24 @@ def main():
     st.markdown(
         """
         <style>
-        h1 { text-align: center; }
-        section.main div.block-container { max-width: 700px; }
+        h1 {
+            text-align: center;
+            margin-top: 0.2rem;
+        }
+        section.main div.block-container {
+            max-width: 760px;
+            padding-top: 0.8rem;
+        }
         .logo-container {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 2px;
         }
         .logo-container img {
-            max-width: 580px;
+            width: 100%;
+            max-width: 820px;
             height: auto;
+            display: block;
+            margin: 0 auto;
         }
         </style>
         """,
@@ -73,7 +82,14 @@ def main():
     )
 
     phone = st.text_input("Phone number", placeholder="Enter your phone number")
-    age = st.number_input("Age*", min_value=21, max_value=80, step=1, value=21)
+
+    age = st.number_input(
+        "Age*",
+        min_value=21,
+        max_value=80,
+        step=1,
+        value=21
+    )
 
     language = st.selectbox(
         "Primary language of your content*",
@@ -86,7 +102,9 @@ def main():
     )
 
     st.markdown("### Social media platforms")
-    st.write("Select the platforms where you actively create content and enter your profile links.")
+    st.write(
+        "Select the platforms where you actively create content and enter your profile links."
+    )
 
     col1, col2 = st.columns([1, 2])
 
@@ -98,11 +116,26 @@ def main():
         facebook_active = st.checkbox("Facebook")
 
     with col2:
-        instagram_link = st.text_input("Instagram profile link", placeholder="https://instagram.com/username")
-        youtube_link = st.text_input("YouTube profile link", placeholder="https://youtube.com/@channel")
-        linkedin_link = st.text_input("LinkedIn profile link", placeholder="https://linkedin.com/in/username")
-        twitter_link = st.text_input("Twitter / X profile link", placeholder="https://twitter.com/username")
-        facebook_link = st.text_input("Facebook profile link", placeholder="https://facebook.com/username")
+        instagram_link = st.text_input(
+            "Instagram profile link",
+            placeholder="https://instagram.com/username"
+        )
+        youtube_link = st.text_input(
+            "YouTube profile link",
+            placeholder="https://youtube.com/@channel"
+        )
+        linkedin_link = st.text_input(
+            "LinkedIn profile link",
+            placeholder="https://linkedin.com/in/username"
+        )
+        twitter_link = st.text_input(
+            "Twitter / X profile link",
+            placeholder="https://twitter.com/username"
+        )
+        facebook_link = st.text_input(
+            "Facebook profile link",
+            placeholder="https://facebook.com/username"
+        )
 
     st.markdown("### Approximate follower count across all platforms*")
     follower_band = st.radio(
