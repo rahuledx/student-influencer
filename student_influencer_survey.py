@@ -2,6 +2,8 @@ import streamlit as st
 from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import base64
+import requests
 
 
 def get_worksheet():
@@ -15,6 +17,12 @@ def get_worksheet():
     client = gspread.authorize(creds)
     sh = client.open_by_url(st.secrets["gsheets"]["spreadsheet_url"])
     return sh.sheet1
+
+
+def svg_to_data_uri(svg_url):
+    svg_text = requests.get(svg_url, timeout=20).text
+    b64 = base64.b64encode(svg_text.encode("utf-8")).decode("utf-8")
+    return f"data:image/svg+xml;base64,{b64}"
 
 
 def main():
@@ -40,7 +48,7 @@ def main():
             margin-bottom: 2px;
         }
         .logo-container img {
-            width: 100%;
+            width: 1000px;
             max-width: 1000px;
             height: auto;
             display: block;
@@ -52,10 +60,12 @@ def main():
     )
 
     logo_url = "https://admin.onlineamrita.com/sites/default/files/2025-04/Amrita%20Online%20Logo%20red%201.svg"
+    logo_data_uri = svg_to_data_uri(logo_url)
+
     st.markdown(
         f"""
         <div class="logo-container">
-            <img src="{logo_url}" alt="Amrita Online Logo">
+            <img src="{logo_data_uri}" alt="Amrita Online Logo">
         </div>
         """,
         unsafe_allow_html=True
@@ -95,9 +105,7 @@ def main():
     )
 
     st.markdown("### Social media platforms")
-    st.write(
-        "Select the platforms where you actively create content and enter your profile links."
-    )
+    st.write("Select the platforms where you actively create content and enter your profile links.")
 
     col1, col2 = st.columns([1, 2])
 
@@ -109,26 +117,11 @@ def main():
         facebook_active = st.checkbox("Facebook")
 
     with col2:
-        instagram_link = st.text_input(
-            "Instagram profile link",
-            placeholder="https://instagram.com/username"
-        )
-        youtube_link = st.text_input(
-            "YouTube profile link",
-            placeholder="https://youtube.com/@channel"
-        )
-        linkedin_link = st.text_input(
-            "LinkedIn profile link",
-            placeholder="https://linkedin.com/in/username"
-        )
-        twitter_link = st.text_input(
-            "Twitter / X profile link",
-            placeholder="https://twitter.com/username"
-        )
-        facebook_link = st.text_input(
-            "Facebook profile link",
-            placeholder="https://facebook.com/username"
-        )
+        instagram_link = st.text_input("Instagram profile link", placeholder="https://instagram.com/username")
+        youtube_link = st.text_input("YouTube profile link", placeholder="https://youtube.com/@channel")
+        linkedin_link = st.text_input("LinkedIn profile link", placeholder="https://linkedin.com/in/username")
+        twitter_link = st.text_input("Twitter / X profile link", placeholder="https://twitter.com/username")
+        facebook_link = st.text_input("Facebook profile link", placeholder="https://facebook.com/username")
 
     st.markdown("### Approximate follower count across all platforms*")
     follower_band = st.radio(
