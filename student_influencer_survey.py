@@ -31,7 +31,7 @@ def main():
         layout="centered"
     )
 
-    # Optional minimal CSS for center layout and hide "press enter" behavior
+    # Optional minimal CSS for center layout and hide helper text
     css = """
     <style>
     h1 {
@@ -48,8 +48,8 @@ def main():
       max-width: 350px;
       height: auto;
     }
-    /* Remove press enter to submit behavior */
-    .stTextInput input, .stNumberInput input {
+    /* Hide the "press enter to submit" helper text */
+    .stForm div[data-baseweb="base-input"] {
       margin-bottom: 0px;
     }
     </style>
