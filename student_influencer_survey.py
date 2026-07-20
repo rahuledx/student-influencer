@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import streamlit.components.v1 as components
 
 
 def get_worksheet():
@@ -18,6 +19,28 @@ def get_worksheet():
     return sh.sheet1
 
 
+def prevent_enter_script():
+    components.html(
+        """
+        <script>
+        const doc = window.parent.document;
+        const inputs = doc.querySelectorAll('input[type="text"], input[type="email"], input[type="number"]');
+        inputs.forEach((input) => {
+            input.setAttribute('autocomplete', 'off');
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            });
+        });
+        </script>
+        """,
+        height=0,
+    )
+
+
 def main():
     st.set_page_config(
         page_title="Student Influencer Survey",
@@ -27,12 +50,8 @@ def main():
 
     css = """
     <style>
-    h1 {
-      text-align: center;
-    }
-    section.main div.block-container {
-      max-width: 700px;
-    }
+    h1 { text-align: center; }
+    section.main div.block-container { max-width: 700px; }
     .logo-container {
       text-align: center;
       margin-bottom: 20px;
@@ -41,14 +60,11 @@ def main():
       max-width: 420px;
       height: auto;
     }
-
-    /* Hide Streamlit helper text like "Press Enter to submit form" */
+    /* Extra hiding attempt for Streamlit helper text */
     div[data-testid="stTextInput"] small,
     div[data-testid="stTextInput"] p,
     div[data-testid="stNumberInput"] small,
-    div[data-testid="stNumberInput"] p,
-    div[data-baseweb="base-input"] + div,
-    div[data-baseweb="base-input"] ~ div {
+    div[data-testid="stNumberInput"] p {
       display: none !important;
       visibility: hidden !important;
       height: 0 !important;
@@ -82,41 +98,20 @@ def main():
 
         program = st.selectbox(
             "Program*",
-            options=[
-                "Online MBA",
-                "Online MCA",
-                "Online MCom",
-                "Online BCom",
-                "Online BBA",
-                "Online BCA"
-            ]
+            ["Online MBA", "Online MCA", "Online MCom", "Online BCom", "Online BBA", "Online BCA"]
         )
 
         semester = st.selectbox(
             "Semester*",
-            options=[
-                "Semester 1",
-                "Semester 2",
-                "Semester 3",
-                "Semester 4",
-                "Semester 5",
-                "Semester 6"
-            ]
+            ["Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6"]
         )
 
         phone = st.text_input("Phone number", placeholder="Enter your phone number")
-
-        age = st.number_input(
-            "Age*",
-            min_value=21,
-            max_value=80,
-            step=1,
-            value=21
-        )
+        age = st.number_input("Age*", min_value=21, max_value=80, step=1, value=21)
 
         language = st.selectbox(
             "Primary language of your content*",
-            options=["English", "Hindi", "Malayalam", "Tamil", "Kannada", "Telugu", "Other"]
+            ["English", "Hindi", "Malayalam", "Tamil", "Kannada", "Telugu", "Other"]
         )
 
         content_type = st.text_input(
@@ -125,10 +120,7 @@ def main():
         )
 
         st.markdown("### Social media platforms")
-        st.write(
-            "Select the platforms where you actively create content and enter "
-            "your profile links."
-        )
+        st.write("Select the platforms where you actively create content and enter your profile links.")
 
         col1, col2 = st.columns([1, 2])
 
@@ -140,43 +132,16 @@ def main():
             facebook_active = st.checkbox("Facebook")
 
         with col2:
-            instagram_link = st.text_input(
-                "Instagram profile link",
-                key="insta_link",
-                placeholder="https://instagram.com/username"
-            )
-            youtube_link = st.text_input(
-                "YouTube profile link",
-                key="yt_link",
-                placeholder="https://youtube.com/@channel"
-            )
-            linkedin_link = st.text_input(
-                "LinkedIn profile link",
-                key="li_link",
-                placeholder="https://linkedin.com/in/username"
-            )
-            twitter_link = st.text_input(
-                "Twitter / X profile link",
-                key="tw_link",
-                placeholder="https://twitter.com/username"
-            )
-            facebook_link = st.text_input(
-                "Facebook profile link",
-                key="fb_link",
-                placeholder="https://facebook.com/username"
-            )
+            instagram_link = st.text_input("Instagram profile link", key="insta_link", placeholder="https://instagram.com/username")
+            youtube_link = st.text_input("YouTube profile link", key="yt_link", placeholder="https://youtube.com/@channel")
+            linkedin_link = st.text_input("LinkedIn profile link", key="li_link", placeholder="https://linkedin.com/in/username")
+            twitter_link = st.text_input("Twitter / X profile link", key="tw_link", placeholder="https://twitter.com/username")
+            facebook_link = st.text_input("Facebook profile link", key="fb_link", placeholder="https://facebook.com/username")
 
         st.markdown("### Approximate follower count across all platforms*")
-
         follower_band = st.radio(
             "Select the range that best represents your total follower/subscriber count:",
-            options=[
-                "0-1000",
-                "1,001–5,000",
-                "5,001–20,000",
-                "20,001–50,000",
-                "50,000+"
-            ]
+            ["0-1000", "1,001–5,000", "5,001–20,000", "20,001–50,000", "50,000+"]
         )
 
         submitted = st.form_submit_button("Submit")
@@ -223,8 +188,6 @@ def main():
                 try:
                     worksheet = get_worksheet()
                     timestamp = datetime.utcnow().isoformat()
-                    platforms_str = ", ".join(platforms)
-
                     row = [
                         timestamp,
                         full_name,
@@ -236,7 +199,7 @@ def main():
                         int(age),
                         language,
                         content_type,
-                        platforms_str,
+                        ", ".join(platforms),
                         instagram_link,
                         youtube_link,
                         linkedin_link,
@@ -244,12 +207,13 @@ def main():
                         facebook_link,
                         follower_band
                     ]
-
                     worksheet.append_row(row)
                     st.success("Thank you for submitting the survey!")
                     st.balloons()
                 except Exception as e:
                     st.error(f"Error saving response: {e}")
+
+    prevent_enter_script()
 
 
 if __name__ == "__main__":
