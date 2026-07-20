@@ -49,8 +49,8 @@ def main():
       height: auto;
     }
     /* Hide the "press enter to submit" helper text */
-    .stForm div[data-baseweb="base-input"] {
-      margin-bottom: 0px;
+    div.stTextInput p, div.stNumberInput p {
+      display: none;
     }
     </style>
     """
