@@ -34,7 +34,7 @@ def main():
             margin-bottom: 20px;
         }
         .logo-container img {
-            max-width: 420px;
+            max-width: 580px;
             height: auto;
         }
         </style>
@@ -54,13 +54,13 @@ def main():
 
     st.title("Student Influencer Survey")
     st.write(
-        "We are identifying students with active social media presence to collaborate "
-        "with us for influencer and campus ambassador opportunities."
+        "We are identifying students with active social media presence at Amrita Online "
+        "to collaborate with us for influencer collaboration opportunities."
     )
 
-    full_name = st.text_input("Full Name*", placeholder="Enter your full name", key="full_name")
-    email = st.text_input("Email*", placeholder="Enter your email address", key="email")
-    city = st.text_input("City*", placeholder="Enter your city", key="city")
+    full_name = st.text_input("Full Name*", placeholder="Enter your full name")
+    email = st.text_input("Email*", placeholder="Enter your email address")
+    city = st.text_input("City*", placeholder="Enter your city")
 
     program = st.selectbox(
         "Program*",
@@ -72,7 +72,7 @@ def main():
         ["", "Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6"]
     )
 
-    phone = st.text_input("Phone number", placeholder="Enter your phone number", key="phone")
+    phone = st.text_input("Phone number", placeholder="Enter your phone number")
     age = st.number_input("Age*", min_value=21, max_value=80, step=1, value=21)
 
     language = st.selectbox(
@@ -82,8 +82,7 @@ def main():
 
     content_type = st.text_input(
         "Type of content you mainly create*",
-        placeholder="e.g., exam prep, coding tutorials, campus vlogs",
-        key="content_type"
+        placeholder="e.g., exam prep, coding tutorials, campus vlogs"
     )
 
     st.markdown("### Social media platforms")
@@ -99,11 +98,11 @@ def main():
         facebook_active = st.checkbox("Facebook")
 
     with col2:
-        instagram_link = st.text_input("Instagram profile link", placeholder="https://instagram.com/username", key="insta_link")
-        youtube_link = st.text_input("YouTube profile link", placeholder="https://youtube.com/@channel", key="yt_link")
-        linkedin_link = st.text_input("LinkedIn profile link", placeholder="https://linkedin.com/in/username", key="li_link")
-        twitter_link = st.text_input("Twitter / X profile link", placeholder="https://twitter.com/username", key="tw_link")
-        facebook_link = st.text_input("Facebook profile link", placeholder="https://facebook.com/username", key="fb_link")
+        instagram_link = st.text_input("Instagram profile link", placeholder="https://instagram.com/username")
+        youtube_link = st.text_input("YouTube profile link", placeholder="https://youtube.com/@channel")
+        linkedin_link = st.text_input("LinkedIn profile link", placeholder="https://linkedin.com/in/username")
+        twitter_link = st.text_input("Twitter / X profile link", placeholder="https://twitter.com/username")
+        facebook_link = st.text_input("Facebook profile link", placeholder="https://facebook.com/username")
 
     st.markdown("### Approximate follower count across all platforms*")
     follower_band = st.radio(
@@ -153,6 +152,7 @@ def main():
             try:
                 worksheet = get_worksheet()
                 timestamp = datetime.utcnow().isoformat()
+
                 row = [
                     timestamp,
                     full_name,
@@ -172,6 +172,7 @@ def main():
                     facebook_link,
                     follower_band
                 ]
+
                 worksheet.append_row(row)
                 st.success("Thank you for submitting the survey!")
                 st.balloons()
