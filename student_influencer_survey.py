@@ -41,7 +41,7 @@ def main():
         }
         .logo-container img {
             width: 100%;
-            max-width: 820px;
+            max-width: 1000px;
             height: auto;
             display: block;
             margin: 0 auto;
@@ -82,14 +82,7 @@ def main():
     )
 
     phone = st.text_input("Phone number", placeholder="Enter your phone number")
-
-    age = st.number_input(
-        "Age*",
-        min_value=21,
-        max_value=80,
-        step=1,
-        value=21
-    )
+    age = st.number_input("Age*", min_value=21, max_value=80, step=1, value=21)
 
     language = st.selectbox(
         "Primary language of your content*",
