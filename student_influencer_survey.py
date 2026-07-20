@@ -31,7 +31,7 @@ def main():
         layout="centered"
     )
 
-    # Optional minimal CSS for center layout
+    # Optional minimal CSS for center layout and hide "press enter" behavior
     css = """
     <style>
     h1 {
@@ -45,8 +45,12 @@ def main():
       margin-bottom: 20px;
     }
     .logo-container img {
-      max-width: 250px;
+      max-width: 350px;
       height: auto;
+    }
+    /* Remove press enter to submit behavior */
+    .stTextInput input, .stNumberInput input {
+      margin-bottom: 0px;
     }
     </style>
     """
@@ -85,7 +89,7 @@ def main():
             ]
         )
         
-        # Semester dropdown
+        # Semester dropdown - only till Semester 6
         semester = st.selectbox(
             "Semester*",
             options=[
@@ -94,16 +98,14 @@ def main():
                 "Semester 3",
                 "Semester 4",
                 "Semester 5",
-                "Semester 6",
-                "Semester 7",
-                "Semester 8"
+                "Semester 6"
             ]
         )
         
         phone = st.text_input("Phone number", placeholder="Enter your phone number")
 
-        # Age
-        age = st.number_input("Age*", min_value=13, max_value=80, step=1)
+        # Age - starts at 21
+        age = st.number_input("Age*", min_value=21, max_value=80, step=1, value=21)
 
         # Language of content
         language = st.selectbox(
