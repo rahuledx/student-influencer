@@ -40,9 +40,25 @@ def main():
     section.main div.block-container {
       max-width: 700px;
     }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo-container img {
+      max-width: 250px;
+      height: auto;
+    }
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
+
+    # Add logo at the top
+    logo_url = "https://admin.onlineamrita.com/sites/default/files/2025-04/Amrita%20Online%20Logo%20red%201.svg"
+    st.markdown(f"""
+    <div class="logo-container">
+        <img src="{logo_url}" alt="Amrita Online Logo">
+    </div>
+    """, unsafe_allow_html=True)
 
     st.title("Student Influencer Survey")
     st.write(
@@ -52,10 +68,39 @@ def main():
 
     with st.form("survey_form", clear_on_submit=True):
         # Basic info
-        full_name = st.text_input("Full Name*")
-        city = st.text_input("City*")
-        program_year = st.text_input("Program and Year*")
-        phone = st.text_input("Phone number")
+        full_name = st.text_input("Full Name*", placeholder="Enter your full name")
+        email = st.text_input("Email*", placeholder="Enter your email address")
+        city = st.text_input("City*", placeholder="Enter your city")
+        
+        # Program dropdown
+        program = st.selectbox(
+            "Program*",
+            options=[
+                "Online MBA",
+                "Online MCA",
+                "Online MCom",
+                "Online BCom",
+                "Online BBA",
+                "Online BCA"
+            ]
+        )
+        
+        # Semester dropdown
+        semester = st.selectbox(
+            "Semester*",
+            options=[
+                "Semester 1",
+                "Semester 2",
+                "Semester 3",
+                "Semester 4",
+                "Semester 5",
+                "Semester 6",
+                "Semester 7",
+                "Semester 8"
+            ]
+        )
+        
+        phone = st.text_input("Phone number", placeholder="Enter your phone number")
 
         # Age
         age = st.number_input("Age*", min_value=13, max_value=80, step=1)
@@ -76,15 +121,15 @@ def main():
 
         # Type of content
         content_type = st.text_input(
-            "Type of content you mainly create* "
-            "(e.g., exam prep, coding tutorials, campus vlogs)"
+            "Type of content you mainly create*",
+            placeholder="e.g., exam prep, coding tutorials, campus vlogs"
         )
 
         st.markdown("### Social media platforms")
 
         st.write(
             "Select the platforms where you actively create content and enter "
-            "your handles/URLs."
+            "your profile links."
         )
 
         col1, col2 = st.columns([1, 2])
@@ -98,19 +143,19 @@ def main():
 
         with col2:
             instagram_handle = st.text_input(
-                "Instagram handle / profile URL", key="insta_handle"
+                "Instagram profile link", key="insta_handle", placeholder="https://instagram.com/username"
             )
             youtube_handle = st.text_input(
-                "YouTube channel URL", key="yt_handle"
+                "YouTube profile link", key="yt_handle", placeholder="https://youtube.com/@channel"
             )
             linkedin_handle = st.text_input(
-                "LinkedIn profile URL", key="li_handle"
+                "LinkedIn profile link", key="li_handle", placeholder="https://linkedin.com/in/username"
             )
             twitter_handle = st.text_input(
-                "Twitter / X handle / URL", key="tw_handle"
+                "Twitter / X profile link", key="tw_handle", placeholder="https://twitter.com/username"
             )
             facebook_handle = st.text_input(
-                "Facebook profile/page URL", key="fb_handle"
+                "Facebook profile link", key="fb_handle", placeholder="https://facebook.com/username"
             )
 
         st.markdown("### Approximate follower count across all platforms*")
@@ -147,10 +192,14 @@ def main():
             errors = []
             if not full_name:
                 errors.append("Full Name is required.")
+            if not email:
+                errors.append("Email is required.")
             if not city:
                 errors.append("City is required.")
-            if not program_year:
-                errors.append("Program and Year is required.")
+            if not program:
+                errors.append("Program is required.")
+            if not semester:
+                errors.append("Semester is required.")
             if age is None:
                 errors.append("Age is required.")
             if not language:
@@ -176,8 +225,10 @@ def main():
                     row = [
                         timestamp,
                         full_name,
+                        email,
                         city,
-                        program_year,
+                        program,
+                        semester,
                         str(phone) if phone else "",
                         int(age),
                         language,
